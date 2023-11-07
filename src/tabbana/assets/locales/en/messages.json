@@ -1,0 +1,11 @@
+{
+    "appName": {
+        "message": "tabbana"
+    },
+    "appShortName": {
+        "message": "tabbana"
+    },
+    "appDescription": {
+        "message": "Manage your browser tabs using natural language instructions."
+    }
+}
