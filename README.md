@@ -1,2 +1,2 @@
-# tabbana-chrome
-Manage your tabs using natural language.
+# Tabbana
+Manage your browser tabs using natural language instructions.
