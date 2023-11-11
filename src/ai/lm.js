@@ -3,8 +3,8 @@ let functions = null;
 let prompts = null;
 
 // load functions as a web_accessible_resource json
-async function getJson(path) {
-  let json = await fetch(chrome.runtime.getURL(path));
+async function getJson(fpath) {
+  let json = await fetch(chrome.runtime.getURL(fpath));
   json = await json.json();
   return json;
 }
@@ -16,22 +16,26 @@ export async function runInstruction(instruction) {
   console.log(`using functions: ${JSON.stringify(functions)}`);
   const tabs = await chrome.tabs.query({"currentWindow": true});
   console.log(tabs);
-  const idx2id = {};
+  const tabidx2id = {};
   const tabStrs = [];
   tabs.forEach(tab => {
     let idx = tab.index+1;
-    idx2id[idx] = tab.id;
+    tabidx2id[idx] = tab.id;
     const s = `- TAB ${idx}: {ID: ${idx}, URL: ${tab.url.slice(0, 150)}, title: "${tab.title.slice(0, 150)}", groupId: ${tab.groupId}, active: ${tab.active}}, audible: ${tab.audible}, status: ${tab.status}, muted: ${tab.mutedInfo.muted}}`;
     tabStrs.push(s);
   });
   const tabStr = tabStrs.join('\n');
   const systemPrompt = prompts.system_prompt;
   const userPrompt = templateStr(prompts.user_prompt_templ, {instruction, tabStr});
-  console.log(systemPrompt);
-  console.log(userPrompt);
-  const data = await call_lm(userPrompt, systemPrompt, functions);
-  console.log(data)
-  callFn(data, idx2id);
+  const openaiRes = await call_lm(userPrompt, systemPrompt, functions);
+  console.log(openaiRes)
+  const finish_reason = openaiRes.choices[0].finish_reason;
+  if (finish_reason === "function_call") {
+    callFn(openaiRes, tabidx2id);
+  } else {
+    console.error(`LM did not call a function.\nINSTRUCTION: ${instruction}\nSYSTEMPROMPT: ${systemPrompt}\nUSERPROMPT: ${userPrompt}`)
+    throw new RangeError('LM did not call a function.');
+  }
 }
 
 async function call_lm(userPrompt, systemPrompt, functions) {
@@ -58,7 +62,7 @@ async function call_lm(userPrompt, systemPrompt, functions) {
       "temperature": 0.0,
     })
   });
-  const data = await response.json();
+  const data = response.json();
   return data;
 }
 
@@ -74,20 +78,15 @@ const name2fn = {
   "close": closeTabs
 }
 
-async function closeTabs(args, idx2id) {
-  const actual_ids = args.tabIds.map((idx) => idx2id[idx]);
+async function closeTabs(args, tabidx2id) {
+  const actual_ids = args.tabIds.map((idx) => tabidx2id[idx]);
   chrome.tabs.remove(actual_ids);
 }
 
-async function callFn(openaiRes, idx2id) {
-  if (openaiRes.choices[0].finish_reason !== "function_call") {
-    console.error('NO FN CALL DONE!!!')
-    throw new Error('NO FN CALL DONE!!!');
-  }
+async function callFn(openaiRes, tabidx2id) {
   const fn_obj = await openaiRes.choices[0].message.function_call;
   console.log(fn_obj)
   const fn_args = JSON.parse(fn_obj.arguments);
-  console.log(fn_args);
   const fn = name2fn[fn_obj.name];
-  fn(fn_args, idx2id);
+  fn(fn_args, tabidx2id);
 }

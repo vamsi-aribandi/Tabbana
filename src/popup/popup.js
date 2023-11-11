@@ -9,8 +9,20 @@ document.querySelector('#go-to-options').addEventListener('click', function() {
   }
 });
 
-document.querySelector('#instruction-form').addEventListener('submit', function(event) {
+document.querySelector('#instruction-form').addEventListener('submit', async function(event) {
   event.preventDefault();
   const instruction = document.querySelector('#instruction').value;
-  lm.runInstruction(instruction);
+  const status = document.getElementById('status');
+  try {
+    await lm.runInstruction(instruction);
+    status.textContent = "Success!";
+    status.style.color = 'green';
+  } catch (error) {
+    if (error instanceof RangeError) status.textContent = `Error: ${error.message}`;
+    else {
+      status.textContent = `Error: see logs`;
+      console.error(error.message)
+    }
+    status.style.color = 'red';
+  }
 });
