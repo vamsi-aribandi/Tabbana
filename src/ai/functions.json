@@ -1,0 +1,57 @@
+[
+    {
+        "name": "close",
+        "description": "Closes one or more tabs.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "tabIds": {
+                    "type": "array",
+                    "description": "The tab IDs to be closed.",
+                    "items": {
+                        "type": "integer"
+                    }
+                }
+            },
+            "required": ["tabIds"]
+        }
+    },
+    {
+        "name": "group",
+        "description": "Adds one or more tabs to a specified group, or if no group is specified, adds the given tabs to a newly created group.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "tabIds": {
+                    "type": "array",
+                    "description": "The tab IDs to be grouped together.",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "groupId": {
+                    "type": "integer",
+                    "description": "The optional group that the tabs should be added to."
+                }
+            },
+            "required": ["tabIds"]
+        }
+    },
+    {
+        "name": "ungroup",
+        "description": "Removes one or more tabs from their respective groups. If any groups become empty, they are deleted.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "tabIds": {
+                    "type": "array",
+                    "description": "The tab IDs to be removed from their groups.",
+                    "items": {
+                        "type": "integer"
+                    }
+                }
+            },
+            "required": ["tabIds"]
+        }
+    }
+]

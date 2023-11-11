@@ -29,5 +29,11 @@
   "options_ui": {
     "page": "options/options.html",
     "open_in_tab": false
-  }
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["ai/functions.json", "ai/prompts.json"],
+      "matches": []
+    }
+  ]
 }
