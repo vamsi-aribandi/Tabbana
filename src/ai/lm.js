@@ -12,8 +12,8 @@ async function getJson(fpath) {
 export async function runInstruction(instruction) {
   if (functions === null) functions = await getJson("ai/functions.json");
   if (prompts === null) prompts = await getJson("ai/prompts.json");
-  console.log(`Running instruction: ${instruction}`);
-  console.log(`using functions: ${JSON.stringify(functions)}`);
+  // console.log(`Running instruction: ${instruction}`);
+  // console.log(`using functions: ${JSON.stringify(functions)}`);
   const tabs = await chrome.tabs.query({"currentWindow": true});
   console.log(tabs);
   const tabidx2id = {};
@@ -28,12 +28,12 @@ export async function runInstruction(instruction) {
   const systemPrompt = prompts.system_prompt;
   const userPrompt = templateStr(prompts.user_prompt_templ, {instruction, tabStr});
   const openaiRes = await call_lm(userPrompt, systemPrompt, functions);
-  console.log(openaiRes)
+  // console.log(openaiRes)
   const finish_reason = openaiRes.choices[0].finish_reason;
   if (finish_reason === "function_call") {
     callFn(openaiRes, tabidx2id);
   } else {
-    console.error(`LM did not call a function.\nINSTRUCTION: ${instruction}\nSYSTEMPROMPT: ${systemPrompt}\nUSERPROMPT: ${userPrompt}`)
+    // console.error(`LM did not call a function.\nINSTRUCTION: ${instruction}\nSYSTEMPROMPT: ${systemPrompt}\nUSERPROMPT: ${userPrompt}`)
     throw new RangeError('LM did not call a function.');
   }
 }
@@ -75,7 +75,9 @@ function templateStr(s, kv) {
 }
 
 const name2fn = {
-  "close": closeTabs
+  "close": closeTabs,
+  "group": groupTabs,
+  "ungroup": ungroupTabs
 }
 
 async function closeTabs(args, tabidx2id) {
@@ -83,9 +85,23 @@ async function closeTabs(args, tabidx2id) {
   chrome.tabs.remove(actual_ids);
 }
 
+async function groupTabs(args, tabidx2id) {
+  const actual_ids = args.tabIds.map((idx) => tabidx2id[idx]);
+  const options = {"tabIds": actual_ids};
+  if (args.hasOwnProperty("groupId")) {
+    options.groupId = args.groupId;
+  }
+  chrome.tabs.group(options);
+}
+
+async function ungroupTabs(args, tabidx2id) {
+  const actual_ids = args.tabIds.map((idx) => tabidx2id[idx]);
+  chrome.tabs.ungroup(actual_ids);
+}
+
 async function callFn(openaiRes, tabidx2id) {
   const fn_obj = await openaiRes.choices[0].message.function_call;
-  console.log(fn_obj)
+  console.log(fn_obj);
   const fn_args = JSON.parse(fn_obj.arguments);
   const fn = name2fn[fn_obj.name];
   fn(fn_args, tabidx2id);
