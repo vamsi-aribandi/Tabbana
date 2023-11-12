@@ -17,6 +17,9 @@ document.querySelector('#instruction-form').addEventListener('submit', async fun
     await lm.runInstruction(instruction);
     status.textContent = "Success!";
     status.style.color = 'green';
+    setTimeout(() => {
+      status.textContent = '';
+    }, 750);
   } catch (error) {
     if (error instanceof RangeError) status.textContent = `Error: ${error.message}`;
     else {
