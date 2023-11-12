@@ -1,0 +1,27 @@
+Privacy Policy
+
+Effective Date: November 11, 2023
+
+This privacy policy describes how our browser extension collects and uses information about your browsing activity. This policy applies only to our browser extension and does not apply to any third party websites you may visit.
+
+Information We Collect
+
+When you use our browser extension, we collect (but never store) information about the tabs you have open in your browser. This includes the titles and URLs of web pages you have open. We do not collect any other information about you or your browsing activity.
+
+How We Use Information
+
+The tab data we collect is sent to OpenAI to provide improved AI capabilities. We do not sell or share your tab data with any other third parties.
+
+Your tab data is processed by OpenAI in accordance with its privacy policy found here: https://openai.com/policies/privacy-policy.
+
+We DO NOT collect or store any other information about you or your use of our browser extension. This includes:
+
+Your name, email address, or any other identifying information
+Your browsing history outside of open tabs
+Any information you enter into websites you visit
+Any other data about you or your computer
+
+
+Our Commitment to Privacy
+
+Protecting user privacy is extremely important to us. We do not collect any personal information about you. The only data we obtain is limited to tab titles and URLs, which is sent to OpenAI as described above.
