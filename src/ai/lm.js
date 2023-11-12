@@ -15,7 +15,7 @@ export async function runInstruction(instruction) {
   // console.log(`Running instruction: ${instruction}`);
   // console.log(`using functions: ${JSON.stringify(functions)}`);
   const tabs = await chrome.tabs.query({"currentWindow": true});
-  console.log(tabs);
+  // console.log(tabs);
   const tabidx2id = {};
   const tabStrs = [];
   tabs.forEach(tab => {
@@ -101,7 +101,6 @@ async function ungroupTabs(args, tabidx2id) {
 
 async function callFn(openaiRes, tabidx2id) {
   const fn_obj = await openaiRes.choices[0].message.function_call;
-  console.log(fn_obj);
   const fn_args = JSON.parse(fn_obj.arguments);
   const fn = name2fn[fn_obj.name];
   fn(fn_args, tabidx2id);
