@@ -53,5 +53,36 @@
             },
             "required": ["tabIds"]
         }
+    },
+    {
+        "name": "create",
+        "description": "Create a new tab, optionally with a url.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "url": {
+                    "type": "string",
+                    "description": "The optional url that the created tab should open."
+                }
+            },
+            "required": []
+        }
+    },
+    {
+        "name": "reload",
+        "description": "Reload one or more tabs.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "tabIds": {
+                    "type": "array",
+                    "description": "The tab IDs to be reloaded.",
+                    "items": {
+                        "type": "integer"
+                    }
+                }
+            },
+            "required": ["tabId"]
+        }
     }
 ]

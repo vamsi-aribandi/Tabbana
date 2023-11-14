@@ -21,7 +21,17 @@ export async function runInstruction(instruction) {
   tabs.forEach(tab => {
     let idx = tab.index+1;
     tabidx2id[idx] = tab.id;
-    const s = `- TAB ${idx}: {ID: ${idx}, URL: ${tab.url.slice(0, 150)}, title: "${tab.title.slice(0, 150)}", groupId: ${tab.groupId}, active: ${tab.active}}, audible: ${tab.audible}, status: ${tab.status}, muted: ${tab.mutedInfo.muted}}`;
+    const tabData = {
+      "idx": idx,
+      "url": tab.url.slice(0, 150),
+      "title": tab.title.slice(0, 150),
+      "groupId": tab.groupId,
+      "active": tab.active,
+      "audible": tab.audible,
+      "status": tab.status,
+      "muted": tab.mutedInfo.muted
+    }
+    const s = templateStr(prompts.tab_format_templ, tabData);
     tabStrs.push(s);
   });
   const tabStr = tabStrs.join('\n');
@@ -69,7 +79,9 @@ async function call_lm(userPrompt, systemPrompt, functions) {
 function templateStr(s, kv) {
   let res = s;
   for (const [k, v] of Object.entries(kv)) {
-    res = res.replace(`{${k}}`, v);
+    while(res.includes(`{${k}}`)) {
+      res = res.replace(`{${k}}`, v);
+    }
   }
   return res;
 }
@@ -77,7 +89,9 @@ function templateStr(s, kv) {
 const name2fn = {
   "close": closeTabs,
   "group": groupTabs,
-  "ungroup": ungroupTabs
+  "ungroup": ungroupTabs,
+  "reload": reloadTab,
+  "create": createTab
 }
 
 async function closeTabs(args, tabidx2id) {
@@ -97,6 +111,15 @@ async function groupTabs(args, tabidx2id) {
 async function ungroupTabs(args, tabidx2id) {
   const actual_ids = args.tabIds.map((idx) => tabidx2id[idx]);
   chrome.tabs.ungroup(actual_ids);
+}
+
+async function createTab(args, tabidx2id) {
+  chrome.tabs.create(args);
+}
+
+async function reloadTab(args, tabidx2id) {
+  const actual_ids = args.tabIds.map((idx) => tabidx2id[idx]);
+  actual_ids.forEach((actual_id) => chrome.tabs.reload(actual_id));
 }
 
 async function callFn(openaiRes, tabidx2id) {
