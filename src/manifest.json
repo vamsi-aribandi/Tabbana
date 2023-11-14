@@ -4,7 +4,7 @@
   "description": "Manage your browser tabs with natural language instructions.",
   "homepage_url": "https://github.com/vamsi-aribandi/tabbana",
   "version": "0.1",
-  "version_name": "0.1",
+  "version_name": "0.2",
   "manifest_version": 3,
   "minimum_chrome_version": "88",
   "permissions": [
