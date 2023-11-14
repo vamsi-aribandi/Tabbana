@@ -14,6 +14,8 @@ document.querySelector('#instruction-form').addEventListener('submit', async fun
   const instruction = document.querySelector('#instruction').value;
   const status = document.getElementById('status');
   const img = document.createElement('img');
+  img.width = 64;
+  img.height = 64;
   img.src = '../icons/loading.gif';
   status.appendChild(img);
   try {
