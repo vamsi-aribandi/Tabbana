@@ -82,7 +82,7 @@
                     }
                 }
             },
-            "required": ["tabId"]
+            "required": ["tabIds"]
         }
     }
 ]
