@@ -2,6 +2,7 @@
 <html>
   <head>
     <title>Tabbana</title>
+    <link rel="stylesheet" type="text/css" href="popup.css">
   </head>
   <body>
 
@@ -10,10 +11,13 @@
       <form id="instruction-form">
         <input type="text" id="instruction" name="instruction" autocomplete="one-time-code">
       </form>
-      
+
+      <div id="status"></div>
+
+      <div style="padding: 5px;"></div>
+
       <!-- see see https://developer.chrome.com/docs/extensions/mv3/options/ -->
       <button id="go-to-options">Options</button>
-      <div id="status"></div>
 
       <script src="popup.js" type="module"></script>
       <script src="ai/lm.js" type="module"></script>

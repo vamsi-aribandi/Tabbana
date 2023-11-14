@@ -13,19 +13,20 @@ document.querySelector('#instruction-form').addEventListener('submit', async fun
   event.preventDefault();
   const instruction = document.querySelector('#instruction').value;
   const status = document.getElementById('status');
+  const img = document.createElement('img');
+  img.src = '../icons/loading.gif';
+  status.appendChild(img);
   try {
     await lm.runInstruction(instruction);
-    status.textContent = "Success!";
-    status.style.color = 'green';
+    img.src = '../icons/success.png';
     setTimeout(() => {
-      status.textContent = '';
-    }, 750);
+      status.removeChild(img);
+    }, 1000);
   } catch (error) {
-    if (error instanceof RangeError) status.textContent = `Error: ${error.message}`;
-    else {
-      status.textContent = `Error: see logs`;
-      console.error(error.message)
-    }
-    status.style.color = 'red';
+    console.error(error.message);
+    img.src = '../icons/failure.png';
+    setTimeout(() => {
+      status.removeChild(img);
+    }, 1000);
   }
 });
