@@ -22,6 +22,8 @@ Currently, the supported actions are:
  - [Closing tabs](https://developer.chrome.com/docs/extensions/reference/tabs/#method-remove)
  - [Grouping tabs](https://developer.chrome.com/docs/extensions/reference/tabs/#method-group)
  - [Ungrouping tabs](https://developer.chrome.com/docs/extensions/reference/tabs/#method-ungroup)
+ - [Creating a tab](https://developer.chrome.com/docs/extensions/reference/tabs/#method-create)
+ - [Reloading tabs](https://developer.chrome.com/docs/extensions/reference/tabs/#method-reload)
 
 
 ## Examples
@@ -31,3 +33,5 @@ Some example commands are:
  - `ungroup the facebook tabs`
  - `close all audible tabs.`
  - `close the first tab`
+ - `create a new github tab`
+ - `reload all the grouped tabs`
