@@ -5,7 +5,7 @@ Manage your browser tabs using natural language instructions.
 </p>
 
 ## Configuration
-1. Install Tabbana from the Chrome Web Store.
+1. Install Tabbana from the [Chrome Web Store](https://chromewebstore.google.com/detail/tabbana-manage-tabs-with/odbdiaifppdoahijolcdjdhodndfmjph).
 2. Configure your OpenAI API key. \
  a. [Create an OpenAI API key](https://platform.openai.com/docs/quickstart/account-setup) if you don't have one. \
  b. Open Tabbana from the extensions menu, and click on the options button. \
